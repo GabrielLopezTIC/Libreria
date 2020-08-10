@@ -1,0 +1,15 @@
+# security
+jwt:
+  secret: secret
+  expiration: 1200
+  
+
+spring:
+  data:
+   mongodb:
+    uri: mongodb+srv://gabriel:gabriel@tsis.wxitp.mongodb.net/gabriel?retryWrites=true&w=majority
+    database: CarritoComprasTSBD
+      
+server:
+  port: 5555 
+

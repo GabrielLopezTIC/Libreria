@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-HospitalData<hospital>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "com.gabriel.hospital.core.HospitalData",
+            "projectName": "hospital",
+            "args": ""
+        }
+    ]
+}
