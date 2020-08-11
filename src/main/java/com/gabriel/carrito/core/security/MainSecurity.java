@@ -3,6 +3,7 @@ package com.gabriel.carrito.core.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -60,10 +61,19 @@ public class MainSecurity extends WebSecurityConfigurerAdapter {
         http.cors()
         .and().csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/venta/**").permitAll()
-                .antMatchers("/libro/**").permitAll()
-                .antMatchers("/roles/**").permitAll()
-                .antMatchers("/usuarios/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/venta/**").hasAnyRole("ADMIN")
+                .antMatchers(HttpMethod.POST,"/venta/**").hasAnyRole("ADMIN","CLIENTE")
+                
+                .antMatchers(HttpMethod.GET, "/libro/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/libro/**").hasAnyRole("ADMIN")
+                .antMatchers(HttpMethod.PUT, "/libro/**").hasAnyRole("ADMIN","CLIENTE")
+                
+                .antMatchers(HttpMethod.DELETE, "/libro/**").hasAnyRole("ADMIN")
+                .antMatchers("/roles/**").hasAnyRole("ADMIN")
+                .antMatchers(HttpMethod.POST,"/usuarios/**").hasAnyRole("ADMIN")
+                .antMatchers(HttpMethod.PUT,"/usuarios/**").hasAnyRole("ADMIN")
+                .antMatchers(HttpMethod.GET,"/usuarios/**").permitAll()
+                .antMatchers(HttpMethod.DELETE,"/usuarios/**").hasAnyRole("ADMIN")
                 .antMatchers("/auth/**").permitAll()
                 .anyRequest().authenticated()
                 .and()

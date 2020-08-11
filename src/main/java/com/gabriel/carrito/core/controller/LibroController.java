@@ -121,10 +121,10 @@ public class LibroController {
     public ResponseEntity<?> deleteByName(@PathVariable(value="name") String name){
 	if(libroService.delete(name)) {
 	    System.out.println("Libro eliminado");
-	    return ResponseEntity.status(HttpStatus.OK).body("Libro: ".concat(name).concat(" eliminado"));
+	    return ResponseEntity.status(HttpStatus.OK).build();
 	}else {
 	    System.out.println("Error al eliminar");
-	    return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body("Error al eliminar");
+	    return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
 	}
     }
     
