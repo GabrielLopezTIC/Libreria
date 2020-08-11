@@ -12,6 +12,8 @@ import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.gabriel.carrito.core.document.Libro;
 import com.gabriel.carrito.core.document.Venta;
 import com.gabriel.carrito.core.dto.VentaItem;
 import com.gabriel.carrito.core.dto.VentaLibroInd;
@@ -110,8 +112,17 @@ public class VentaServiceImpl {
 	Integer rep = 0;
 	for (Map.Entry<String, Integer> entry : masVend.entrySet()) {
 	    rep++;
-	    VentaLibroInd vent = new VentaLibroInd(libroRepo.findByIsbn(entry.getKey()).get(), entry.getValue());
-	    librosMasV.add(vent);
+	    
+	    Optional<Libro> libro = libroRepo.findByIsbn(entry.getKey());
+	    if(libro.isPresent()) {
+		VentaLibroInd vent = new VentaLibroInd(  libro.get() , entry.getValue());
+		librosMasV.add(vent);
+	    }
+	    
+	 
+		 
+	
+	   
 	    if(rep == cant)
 		break;
 	}
