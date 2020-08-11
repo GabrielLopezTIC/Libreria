@@ -79,6 +79,7 @@ public class LibroController {
 	    lib.get().setAutor(libro.getAutor());
 	    lib.get().setIsbn(libro.getIsbn());
 	    lib.get().setAño(libro.getAño());
+	    lib.get().setDisponibles(libro.getDisponibles());
 	    lib.get().setEditorial(libro.getEditorial());
 	    lib.get().setGenero(libro.getGenero());
 	    lib.get().setSinopsis(libro.getSinopsis());
