@@ -51,20 +51,36 @@ public class UserController {
      * @param bindingResult
      * @return
      */
-    @PostMapping("/create")
-    public ResponseEntity<?> nuevo(@Valid @RequestBody NuevoUsuario nuevoUsuario, BindingResult bindingResult){  
+    @PostMapping("/createAdmin")
+    public ResponseEntity<?> nuevo(@Valid @RequestBody NuevoUsuario nuevoUsuario, BindingResult bindingResult){
+	
         Usuario usuario =
                 new Usuario(nuevoUsuario.getNombre(), nuevoUsuario.getNombreUsuario(), nuevoUsuario.getEmail(),
                         passwordEncoder.encode(nuevoUsuario.getPassword()));
        
         Set<Rol> roles = new HashSet<>();
-        System.out.println(nuevoUsuario.getRoles());
-        
+       
         //asignacion de roles
         if(nuevoUsuario.getRoles().contains("admin"))
             roles.add(rolService.getByRolNombre(RolNombre.ROLE_ADMIN).get());
         if(nuevoUsuario.getRoles().contains("cliente"))
             roles.add(rolService.getByRolNombre(RolNombre.ROLE_CLIENTE).get());
+       
+        
+        usuario.setRoles(roles);
+        usuarioService.save(usuario);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new Mensaje("Usuario guardado con exito"));
+    }
+    
+    @PostMapping("/createCliente")
+    public ResponseEntity<?> nuevoCliente(@Valid @RequestBody NuevoUsuario nuevoUsuario, BindingResult bindingResult){
+	
+        Usuario usuario =
+                new Usuario(nuevoUsuario.getNombre(), nuevoUsuario.getNombreUsuario(), nuevoUsuario.getEmail(),
+                        passwordEncoder.encode(nuevoUsuario.getPassword()));
+       
+        Set<Rol> roles = new HashSet<>();
+        roles.add(rolService.getByRolNombre(RolNombre.ROLE_CLIENTE).get());
        
         
         usuario.setRoles(roles);

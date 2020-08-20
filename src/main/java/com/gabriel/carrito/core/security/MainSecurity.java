@@ -70,7 +70,8 @@ public class MainSecurity extends WebSecurityConfigurerAdapter {
                 
                 .antMatchers(HttpMethod.DELETE, "/libro/**").hasAnyRole("ADMIN")
                 .antMatchers("/roles/**").hasAnyRole("ADMIN")
-                .antMatchers(HttpMethod.POST,"/usuarios/**").hasAnyRole("ADMIN")
+                .antMatchers(HttpMethod.POST,"/usuarios/createAdmin").hasAnyRole("ADMIN")
+                .antMatchers(HttpMethod.POST,"/usuarios/createCliente").permitAll()
                 .antMatchers(HttpMethod.PUT,"/usuarios/**").hasAnyRole("ADMIN")
                 .antMatchers(HttpMethod.GET,"/usuarios/**").hasAnyRole("ADMIN")
                 .antMatchers(HttpMethod.DELETE,"/usuarios/**").hasAnyRole("ADMIN")
