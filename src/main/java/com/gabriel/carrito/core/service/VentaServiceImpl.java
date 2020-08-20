@@ -89,21 +89,29 @@ public class VentaServiceImpl {
     }
 
     public Optional<List<VentaLibroInd>> findMasVend(String inicioMes, Integer cant) throws ParseException {
+	SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
+	Date inicioSem = sdformat.parse(inicioMes);
+	Date inicioLapso = utilities.sumarRestarDias(inicioSem, -1);
+	Date finLapso = utilities.sumarRestarMeses(inicioLapso, 1);
+	
 	SortedMap<String, Integer> masVend = new TreeMap<String, Integer>(java.util.Collections.reverseOrder());
 
 	// List<Venta> ventas = findAllByMounth(inicioMes).get();
 	List<Venta> ventas = findAll().get();
 
 	for (Venta venta : ventas) {
-	    for (VentaItem ventaItem : venta.getLibros()) {
-		// si el libro ya esta en la lista sima la cantidad
-		if (masVend.containsKey(ventaItem.getLibro().getIsbn())) {
-		    masVend.replace(ventaItem.getLibro().getIsbn(),
-			    masVend.get(ventaItem.getLibro().getIsbn()) + ventaItem.getCantidad());
-		} else {
-		    masVend.put(ventaItem.getLibro().getIsbn(), ventaItem.getCantidad());
-		}
+	    Date fecha = sdformat.parse(venta.getFechaVenta());
+	    if ((fecha.compareTo(inicioLapso)) > 0 && (finLapso.compareTo(fecha) > 0)) {
+		  for (VentaItem ventaItem : venta.getLibros()) {
+			// si el libro ya esta en la lista sima la cantidad
+			if (masVend.containsKey(ventaItem.getLibro().getIsbn())) {
+			    masVend.replace(ventaItem.getLibro().getIsbn(),
+				    masVend.get(ventaItem.getLibro().getIsbn()) + ventaItem.getCantidad());
+			} else {
+			    masVend.put(ventaItem.getLibro().getIsbn(), ventaItem.getCantidad());
+			}
 
+		    }
 	    }
 	}
 
@@ -112,7 +120,6 @@ public class VentaServiceImpl {
 	Integer rep = 0;
 	for (Map.Entry<String, Integer> entry : masVend.entrySet()) {
 	    rep++;
-	    
 	    Optional<Libro> libro = libroRepo.findByIsbn(entry.getKey());
 	    if(libro.isPresent()) {
 		VentaLibroInd vent = new VentaLibroInd(  libro.get() , entry.getValue());
@@ -120,9 +127,6 @@ public class VentaServiceImpl {
 	    }
 	    
 	 
-		 
-	
-	   
 	    if(rep == cant)
 		break;
 	}
